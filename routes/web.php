@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Frontend\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -9,19 +9,23 @@ use App\Http\Controllers\Frontend\HomeController;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::get('/', function () {
-    return view('comming_soon');
+    return view('welcome');
 });
 
-Route::get('/under_review/home', function () {
-    return view('frontend/index');
-})->name('home');
-Route::get('/about-us', [HomeController::class,'aboutUs'])->name('about');
-Route::get('/service-details', [HomeController::class,'serviceDetails'])->name('service-details');
-Route::get('/contact-us', [HomeController::class,'contactUs'])->name('contact');
-Route::get('/faqs', [HomeController::class, 'faqs'])->name('faqs');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
