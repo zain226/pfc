@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('comming_soon');
 });
+Route::get('/come', function () {
+    return view('comming_soonn');
+});
 
 Route::get('/under_review/home', function () {
     return view('frontend/index');
